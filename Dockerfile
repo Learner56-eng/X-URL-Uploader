@@ -1,17 +1,27 @@
 FROM xgorn/python-phantomjs:3.9
 
-# Copy coding files to workdir
-COPY . /app/
-WORKDIR /app/
+# Set the working directory in the container
+WORKDIR /app
 
-ENV PYTHONUNBUFFERED=1
+# Update the package list and install required packages
+RUN apt-get update && \
+    apt-get install -y \
+    ffmpeg \
+    aria2 \
+    git \
+    wget \
+    pv \
+    jq \
+    python3-dev \
+    mediainfo && \
+    rm -rf /var/lib/apt/lists/*
 
-# Copy requirements.txt to root
+# Install the necessary Python packages
 COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install dependencies
-RUN pip3 install --no-cache-dir -r requirements.txt
-RUN apt-get update
-RUN apt-get install -y ffmpeg
+# Copy the rest of the application code
+COPY . .
 
-CMD python3 -m Bot
+# Run gunicorn and lncrawl bot
+CMD ["sh", "-c", "gunicorn app:app & python3 -m Bot.py"]
