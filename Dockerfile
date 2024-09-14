@@ -24,4 +24,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Run gunicorn and lncrawl bot
-CMD ["sh", "-c", "gunicorn app:app & python3 -m Bot.py"]
+CMD ["sh", "-c", "gunicorn app:app & python3 -m bot.py"]
