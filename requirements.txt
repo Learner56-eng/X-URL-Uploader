@@ -9,3 +9,7 @@ Pillow
 motor
 dnspython
 python-dotenv
+# app requirements
+flask
+# other dependencies
+gunicorn
